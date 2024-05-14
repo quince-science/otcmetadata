@@ -26,9 +26,10 @@ def _otc_uri(item):
 
 def get_items_without(item_class: str, relationship: str) -> list:
     query = f"""{_OTC_QUERY_PREFIX}
-            select ?uri ?label where {{
+            select ?uri ?label ?name where {{
             ?uri rdf:type <{_otc_uri(item_class)}> .
             OPTIONAL {{?uri rdfs:label ?label}} .
+            OPTIONAL {{?uri <http://meta.icos-cp.eu/ontologies/otcmeta/hasName> ?name}} .
             FILTER NOT EXISTS {{[] <{_otc_uri(relationship)}> ?uri}}
             }}
     """
@@ -38,7 +39,8 @@ def get_items_without(item_class: str, relationship: str) -> list:
     for record in query_result.bindings:
         result.append({
             'uri': record['uri'].uri,
-            'label': record['label'].value if 'label' in record else None
+            'label': record['label'].value if 'label' in record else None,
+            'name': record['name'].value if 'name' in record else None
         })
 
     return result
