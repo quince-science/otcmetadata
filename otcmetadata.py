@@ -24,7 +24,7 @@ def _otc_uri(item):
     return f'{_OTC_CLASS_URI_BASE}{item}'
 
 
-def get_items_without(item_class: str, relationship: str) -> list:
+def get_items_without(item_class: str, relationship: str, print_query: bool = False) -> list:
     query = f"""{_OTC_QUERY_PREFIX}
             select ?uri ?label ?name where {{
             ?uri rdf:type <{_otc_uri(item_class)}> .
@@ -33,6 +33,8 @@ def get_items_without(item_class: str, relationship: str) -> list:
             FILTER NOT EXISTS {{[] <{_otc_uri(relationship)}> ?uri}}
             }}
     """
+    if print_query:
+        print(query)
     query_result = meta.sparql_select(query)
     result = []
 
