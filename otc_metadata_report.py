@@ -5,8 +5,6 @@ import argparse
 
 import otcmetadata
 
-DEBUG = False
-
 
 def _print_orphans(type: str, orphans: list) -> None:
     print(f'Orphaned {type}:')
@@ -55,6 +53,34 @@ def orphans() -> None:
                    otcmetadata.get_items_without('Station', 'atOrganization', DEBUG))
 
 
+def missing_labels_and_names() -> None:
+    for thing in otcmetadata.OTC_THINGS:
+        labels_and_names = otcmetadata.get_thing_labels_names(thing, DEBUG)
+
+        print(thing)
+        print('========')
+
+        good_count = 0
+        total_count = 0
+
+        for entry in labels_and_names:
+            has_label = entry['label'] is not None
+            has_name = entry['name'] is not None
+
+            if has_label and has_name:
+                good_count += 1
+            else:
+                print(f'URI: {entry["uri"]}:')
+                print(f'  Label: {"MISSING" if not has_label else entry["label"]}')
+                print(f'  Name: {"MISSING" if not has_label else entry["name"]}')
+                print()
+
+            total_count += 1
+
+        print(f'{good_count} of {total_count} entries good')
+        print()
+
+
 ######################################################################
 # Main script: Parse command line and run the selected report.
 _REPORTS_REQUIRING_URI = ['person']
@@ -62,6 +88,7 @@ _REPORTS_REQUIRING_URI = ['person']
 parser = argparse.ArgumentParser(description='Generate reports of OTC metadata')
 parser.add_argument('-report', type=str, nargs=1, help='The report to generate', required=True,
                     choices=[
+                        'nolabel',
                         'orphans',
                         'person'
                     ])
@@ -77,3 +104,5 @@ if report in _REPORTS_REQUIRING_URI and args.uri is None:
 
 if report == 'orphans':
     orphans()
+elif report == 'nolabel':
+    missing_labels_and_names()
