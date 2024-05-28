@@ -153,7 +153,7 @@ def get_thing_labels_names(type: str, print_query: bool = False) -> list:
     ORDER BY ASC(?uri)
     """
 
-    if (print_query):
+    if print_query:
         print(query)
 
     query_result = meta.sparql_select(query)

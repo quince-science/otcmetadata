@@ -89,7 +89,7 @@ def _label_name_entry(entry: dict) -> bool:
     else:
         print(f'URI: {entry["uri"]}:')
         print(f'  Label: {"MISSING" if not has_label else entry["label"]}')
-        print(f'  Name: {"MISSING" if not has_label else entry["name"]}')
+        print(f'  Name: {"MISSING" if not has_name else entry["name"]}')
         print()
 
     return result
