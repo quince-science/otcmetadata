@@ -16,25 +16,80 @@ _OTC_QUERY_PREFIX = """prefix otcmeta: <http://meta.icos-cp.eu/ontologies/otcmet
 
 # Defined types for the OTC metadata.
 # Omits the umbrella Organization; does its members separately
+# Each item is an entry of [item, hasName]
 OTC_THINGS = [
-    'AcademicInstitution',
-    'AssumedRole',
-    'Calibration',
-    'CommercialCompany',
-    'Device'
-    'DriftingBuoy',
-    'Funder',
-    'Funding',
-    'Instrument',
-    'InstrumentDeployment',
-    'Mooring',
-    'Person',
-    'PlatformDeployment',
-    'Sensor',
-    'SensorDeployment',
-    'Ship',
-    'Station',
-    'Variable'
+    {
+        'type': 'AcademicInstitution',
+        'hasName': True
+    },
+    {
+        'type': 'AssumedRole',
+        'hasName': False
+    },
+    {
+        'type': 'Calibration',
+        'hasName': False
+    },
+    {
+        'type': 'CommercialCompany',
+        'hasName': True
+    },
+    {
+        'type': 'Device',
+        'hasName': True
+    },
+    {
+        'type': 'DriftingBuoy',
+        'hasName': False
+    },
+    {
+        'type': 'Funder',
+        'hasName': True
+    },
+    {
+        'type': 'Funding',
+        'hasName': False
+    },
+    {
+        'type': 'Instrument',
+        'hasName': True
+    },
+    {
+        'type': 'InstrumentDeployment',
+        'hasName': False
+    },
+    {
+        'type': 'Mooring',
+        'hasName': True
+    },
+    {
+        'type': 'Person',
+        'hasName': False
+    },
+    {
+        'type': 'PlatformDeployment',
+        'hasName': False
+    },
+    {
+        'type': 'Sensor',
+        'hasName': True
+    },
+    {
+        'type': 'SensorDeployment',
+        'hasName': False
+    },
+    {
+        'type': 'Ship',
+        'hasName': True
+    },
+    {
+        'type': 'Station',
+        'hasName': True
+    },
+    {
+        'type': 'Variable',
+        'hasName': True
+    }
 ]
 
 
@@ -86,6 +141,7 @@ def get_thing_labels_names(type: str, print_query: bool = False) -> list:
     """
     Get the URIs of all items of a given type, along with their labels and names.
     :param type: The type of the items to be returned
+    :param print_query: Specifies whether the query should be printed for debugging
     :return: A list of [URI, Label, Name]
     """
     query = f"""{_OTC_QUERY_PREFIX}

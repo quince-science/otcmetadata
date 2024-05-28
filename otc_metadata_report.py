@@ -55,30 +55,59 @@ def orphans() -> None:
 
 def missing_labels_and_names() -> None:
     for thing in otcmetadata.OTC_THINGS:
-        labels_and_names = otcmetadata.get_thing_labels_names(thing, DEBUG)
+        labels_and_names = otcmetadata.get_thing_labels_names(thing['type'], DEBUG)
 
-        print(thing)
+        print(thing['type'])
         print('========')
 
         good_count = 0
         total_count = 0
 
         for entry in labels_and_names:
-            has_label = entry['label'] is not None
-            has_name = entry['name'] is not None
-
-            if has_label and has_name:
-                good_count += 1
+            if thing['hasName']:
+                good = _label_name_entry(entry)
             else:
-                print(f'URI: {entry["uri"]}:')
-                print(f'  Label: {"MISSING" if not has_label else entry["label"]}')
-                print(f'  Name: {"MISSING" if not has_label else entry["name"]}')
-                print()
+                good = _label_only_entry(entry)
+
+            if good:
+                good_count += 1
 
             total_count += 1
 
         print(f'{good_count} of {total_count} entries good')
         print()
+
+
+def _label_name_entry(entry: dict) -> bool:
+    result = False
+
+    has_label = entry['label'] is not None
+    has_name = entry['name'] is not None
+
+    if has_label and has_name:
+        result = True
+    else:
+        print(f'URI: {entry["uri"]}:')
+        print(f'  Label: {"MISSING" if not has_label else entry["label"]}')
+        print(f'  Name: {"MISSING" if not has_label else entry["name"]}')
+        print()
+
+    return result
+
+
+def _label_only_entry(entry: dict) -> bool:
+    result = False
+
+    has_label = entry['label'] is not None
+
+    if has_label:
+        result = True
+    else:
+        print(f'URI: {entry["uri"]}:')
+        print(f'  Label: {"MISSING" if not has_label else entry["label"]}')
+        print()
+
+    return result
 
 
 ######################################################################
